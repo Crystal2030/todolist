@@ -1,0 +1,28 @@
+{
+  "name": "todolist",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Crystal2030 <867389458@qq.com>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "todolist"
+  ],
+  "homepage": "https://github.com/Crystal2030/nodestudy",
+  "moduleType": [
+    "node"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^2.2.2",
+    "angular": "^1.5.3",
+    "bootstrap": "^3.3.6"
+  }
+}
