@@ -27,6 +27,18 @@ router.route('/todos').get(function(req, res, next) {
     }
   });
 });
+//批量删除
+router.route('/todos/delete').post(function(req, res){
+  var ids = req.body;
+  todoModel.remove({_id: {$in: ids}}, function(err, result){
+    if(err){
+      res.send({code:0, msg:'批量删除失败'});
+    }else{
+      res.send({code:1, msg:'批量删除成功'});
+    }
+  })
+});
+
 //删除操作
 router.route('/todos/:_id').delete(function(req, res){
   todoModel.remove({_id: req.params._id}, function(err, result){
@@ -36,6 +48,8 @@ router.route('/todos/:_id').delete(function(req, res){
       res.send({code:1, msg:'删除成功'});
     }
   })
-})
+});
+
+
 
 module.exports = router;

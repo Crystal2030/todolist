@@ -10,13 +10,14 @@
   <body style="margin-top:50px;" ng-controller="todoController">
       <div class="container">
         <div class="jumbotron text-center">
-          <h1><label class="label label-info">你有{{}}待办事项</label></h1>
+          <h1><label class="label label-info">你有{{todos.length}}待办事项</label></h1>
         </div>
         <div class="row">
           <div class="col-md-offset-4 col-md-4">
+            <button class="btn btn-success" ng-click="selectAll()">全选</button>
             <div class="checkbox" ng-repeat="todo in todos">
               <label>
-                <input type="checkbox"> {{todo.text}} <span class="glyphicon glyphicon-minus" ng-click="delete(todo._id)"></span>
+                <input type="checkbox" ng-checked="todo.checked"  ng-click="todo.checked != todo.checked"> {{todo.text}} <span class="glyphicon glyphicon-minus" ng-click="delete(todo._id)"></span>
               </label>
             </div>
           </div>
@@ -54,6 +55,9 @@
       },
       delete: function(id){//删除事项
         return $http.delete('/todos/'+id);
+      },
+      batchDelete: function(data){
+        return $http.post('/todos/delete', data);
       }
     };
   });
@@ -64,11 +68,15 @@
     });
 
     $scope.todo = {};
+    $scope.selected = [];
+    $scope.checked = 0;
+    $scope.all = 0;
 
     $scope.addTodo = function(){
       //保存新事项
       todoService.add($scope.todo).success(function(todo){
         $scope.todos.push(todo);
+        $scope.todo = {};
       });
     };
 
@@ -78,6 +86,39 @@
           return todo._id != id;
         });
       });
+    };
+
+    $scope.isSelected = function(id) {
+      var index = $scope.selected.indexOf(id);
+      if (index >= 0) {
+        $scope.selected.splice(index, 1);
+      } else {
+        $scope.selected.push(id);
+      }
+    }
+
+    $scope.batchDelete = function(){
+      var selectedIds = [];
+      $scope.todos.forEach(function(todo){
+        if(todo.checked){
+          selectedIds.push(todo._id);
+        }
+      })
+      todoService.batchDelete(selectedIds).success(function(){
+        $scope.todos = $scope.todos.filter(function(todo){
+          return selectedIds.indexOf(todo._id) == -1;
+        })
+      })
+    }
+
+    $scope.selectAll = function(){
+      var all = $scope.todos.length;
+      var selectedLen = $scope.todos.filter(function(todo){
+        return todo.checked;
+      }).length;
+      $scope.todos.forEach(function(todo){
+        todo.checked = (all != selectedLen);
+      })
     };
 
   });
