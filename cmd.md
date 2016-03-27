@@ -14,12 +14,20 @@
 ##在项目下添加配置文件 .bowerrrc
 
   {"directory":"./public/lib"}
+  >如果没有此配置项，则安装到bower_components目录下
 
 
 ##安装前端框架
+
 > bower install angular --save
 > bower install jquery --save
 > bower install bootstrap --save
 
 # 初始化项目
-git init
+```git init```
+
+# 添加并提交代码，推送到远程仓库
+> git add .
+> git commit -m "init"
+> git remote add origin git@github.com:Crystal2030/todolist.git
+> git push -u origin master
