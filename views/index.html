@@ -16,7 +16,7 @@
         <div class="row">
           <div class="col-md-offset-4 col-md-4">
             <p class="text-center" ng-show="loading">
-              <i class="fa fa-camera-retro"></i>
+              <i class="fa fa-spinner fa-spin"></i>
             </p>
             <button class="btn btn-success" ng-click="selectAll()">全选</button>
             <div class="checkbox" ng-repeat="todo in todos">
@@ -69,40 +69,37 @@
     //请求服务器所有的待办事项，返回一个promise
     todoService.list().success(function(todos){
       $scope.todos = todos;
+      $scope.loading = false;
     });
 
     $scope.todo = {};
     $scope.selected = [];
     $scope.checked = 0;
     $scope.all = 0;
-    $scope.loading = false;
+    $scope.loading = true;
 
     $scope.addTodo = function(){
+      $scope.loading = true;
       //保存新事项
       todoService.add($scope.todo).success(function(todo){
         $scope.todos.push(todo);
         $scope.todo = {};
+        $scope.loading = false;
       });
     };
 
     $scope.delete = function(id){
+      $scope.loading = true;
       todoService.delete(id).success(function(){
         $scope.todos = $scope.todos.filter(function(todo){
           return todo._id != id;
         });
+        $scope.loading = false;
       });
     };
 
-    $scope.isSelected = function(id) {
-      var index = $scope.selected.indexOf(id);
-      if (index >= 0) {
-        $scope.selected.splice(index, 1);
-      } else {
-        $scope.selected.push(id);
-      }
-    }
-
     $scope.batchDelete = function(){
+      $scope.loading = true;
       var selectedIds = [];
       $scope.todos.forEach(function(todo){
         if(todo.checked){
@@ -113,6 +110,7 @@
         $scope.todos = $scope.todos.filter(function(todo){
           return selectedIds.indexOf(todo._id) == -1;
         })
+        $scope.loading = false;
       })
     }
 
