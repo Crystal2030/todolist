@@ -5,13 +5,21 @@
     <meta charset="utf-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
-    <link rel="stylesheet" href="../public/lib/bootstrap/dist/css/bootstrap.css"/>
     <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css"/>
   </head>
-  <body style="margin-top:50px;">
+  <body style="margin-top:50px;" ng-controller="todoController">
       <div class="container">
         <div class="jumbotron text-center">
           <h1><label class="label label-info">你有{{}}待办事项</label></h1>
+        </div>
+        <div class="row">
+          <div class="col-md-offset-4 col-md-4">
+            <div class="checkbox" ng-repeat="todo in todos">
+              <label>
+                <input type="checkbox"> {{todo.text}}
+              </label>
+            </div>
+          </div>
         </div>
       </div>
   </body>
@@ -22,6 +30,6 @@
 <script>
   angular.module('todoModule', []);
   angular.module('todoModule').controller('todoController', function($scope){
-
+    $scope.todos = [{_id:1, text:'买房'},{_id:2, text:'买车'}];
   });
 </script>
