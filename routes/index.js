@@ -6,7 +6,9 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-router.get('/todos', function(req, res, next) {
+
+//给路由先指定路径，在指定方法，还可以链式调用
+router.route('/todos').get(function(req, res, next) {
   todoModel.find({}, function(err, todos){
     if(err){
       res.send({code:0, msg:'查询错误'});l
@@ -14,9 +16,7 @@ router.get('/todos', function(req, res, next) {
       res.send(todos);
     }
   });
-});
-
-router.post('/todos', function(req, res) {
+}).post(function(req, res) {
   var todo = req.body;
   todoModel.create(todo, function(err, todo){
     if(err){
@@ -27,5 +27,15 @@ router.post('/todos', function(req, res) {
     }
   });
 });
+//删除操作
+router.route('/todos/:_id').delete(function(req, res){
+  todoModel.remove({_id: req.params._id}, function(err, result){
+    if(err){
+      res.send({code:0, msg:'删除失败'});
+    }else{
+      res.send({code:1, msg:'删除成功'});
+    }
+  })
+})
 
 module.exports = router;
